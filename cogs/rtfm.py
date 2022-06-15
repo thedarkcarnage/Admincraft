@@ -30,7 +30,10 @@ class RTFMS(commands.Cog):
         document: discord.Option(str, "doc", choices=opt, required=True),
         lookup: str,
     ):
+        lookup = lookup.lower()
         await ctx.defer()
+        if len(lookup) < 3:
+            return await ctx.respond("Minimum search length is 3", ephemeral=True)
         # checks to see what type of document we want to lookup in
         if document.lower() in ["paper", "papermc", "pa"]:
             async with aiohttp.ClientSession() as session:

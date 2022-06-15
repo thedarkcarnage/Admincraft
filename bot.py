@@ -5,7 +5,7 @@ import logging
 from dotenv import load_dotenv
 import aiohttp
 import mimetypes
-from discord.ext import bridge,commands
+from discord.ext import bridge, commands
 
 # import subprocess
 guild_id = os.getenv("id")
@@ -16,12 +16,15 @@ bot = bridge.Bot(
     case_insensitive=True,
     debug_guilds=guild_id,
 )
+
+
 class MyHelp(commands.MinimalHelpCommand):
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
             emby = discord.Embed(description=page)
             await destination.send(embed=emby)
+
 
 bot.help_command = MyHelp()
 load_dotenv()
@@ -128,6 +131,22 @@ async def on_message(message):
                 embed_var = discord.Embed(
                     title="Please use a paste service next time!!", color=0x1D83D4
                 )
+            if text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") != -1:
+                embed_var.add_field(
+                    name="❌ OFFLINE MODE", value="Offline mode has been detected"
+                )
+
+            if (
+                text.lower().find("blackspigot") != -1
+                or text.lower().find("cracked by") != -1
+                or text.lower().find("leaked by") != -1
+                or text.lower().find("directleaks") != -1
+                or text.lower().find("@bsmc") != -1
+            ):
+                embed_var.add_field(
+                    name="❌ Stolen plugins", value="**likely has cracked plugins**"
+                )
+
                 embed_var.description = response
                 try:
                     print("sucessfuly sent embed")
@@ -174,6 +193,21 @@ async def on_message(message):
                 title="Pastebin is blocked in some countries so it has been converted.",
                 color=0x1D83D4,
             )
+            if text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") != -1:
+                embed_var.add_field(
+                    name="❌ OFFLINE MODE", value="Offline mode has been detected"
+                )
+
+            if (
+                text.lower().find("blackspigot") != -1
+                or text.lower().find("cracked by") != -1
+                or text.lower().find("leaked by") != -1
+                or text.lower().find("directleaks") != -1
+                or text.lower().find("@bsmc") != -1
+            ):
+                embed_var.add_field(
+                    name="❌ Stolen plugins", value="**likely has cracked plugins**"
+                )
             embed_var.description = response
             try:
                 await message.channel.send(embed=embed_var)
@@ -209,7 +243,9 @@ async def on_command_error(ctx, error):
 
 
 # Simple ping command
-@bot.bridge_command(description='Check to see if the bot is running or how fast it is today')
+@bot.bridge_command(
+    description="Check to see if the bot is running or how fast it is today"
+)
 async def ping(ctx):
     await ctx.defer()
     await ctx.respond(f"bot ping is {round(bot.latency * 1000)}ms")

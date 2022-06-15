@@ -10,14 +10,21 @@ import json
 class RTFM(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.command(description="lets you search values in docs <documents> -> paper | bukkit | purpur ")
+
+    @commands.command(
+        description="lets you search values in docs <documents> -> paper | bukkit | purpur "
+    )
     async def rtfm(
         self,
         ctx,
         document: str,
         lookup: str,
     ):
+        lookup = lookup.lower()
+        if lookup == None or lookup == "":
+            return await ctx.reply("RTFM < paper | purpur | bukkit > <lookup term>")
+        if len(lookup) < 3:
+            return await ctx.reply("Minimum search length is 3")
         await ctx.defer()
         # checks to see what type of document we want to lookup in
         if document.lower() in ["paper", "papermc", "pa"]:
