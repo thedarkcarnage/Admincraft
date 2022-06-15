@@ -5,16 +5,25 @@ import logging
 from dotenv import load_dotenv
 import aiohttp
 import mimetypes
-from discord.ext import bridge
+from discord.ext import bridge,commands
 
 # import subprocess
+guild_id = os.getenv("id")
 
 bot = bridge.Bot(
     command_prefix=";",
     intents=discord.Intents.all(),
     case_insensitive=True,
-    debug_guilds=[513084268092850185],
-)  # note to self. add admincraft id to this
+    debug_guilds=guild_id,
+)
+class MyHelp(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            emby = discord.Embed(description=page)
+            await destination.send(embed=emby)
+
+bot.help_command = MyHelp()
 load_dotenv()
 
 logging.basicConfig(
@@ -200,7 +209,7 @@ async def on_command_error(ctx, error):
 
 
 # Simple ping command
-@bot.bridge_command()
+@bot.bridge_command(description='Check to see if the bot is running or how fast it is today')
 async def ping(ctx):
     await ctx.defer()
     await ctx.respond(f"bot ping is {round(bot.latency * 1000)}ms")

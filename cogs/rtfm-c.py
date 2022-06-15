@@ -7,15 +7,11 @@ import re
 import json
 
 
-opt = [
-    discord.OptionChoice(name="PaperMC", value="paper"),
-    discord.OptionChoice(name="PurpurMC", value="purpur"),
-    discord.OptionChoice(name="Bukkit", value="bukkit"),
-]
-
-
 class RTFM(commands.Cog):
-    @commands.command(description="lets you search docs")
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command(description="lets you search values in docs <documents> -> paper | bukkit | purpur ")
     async def rtfm(
         self,
         ctx,

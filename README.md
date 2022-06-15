@@ -29,7 +29,7 @@ Easy way for users to find relevent guides.
 3) you have two choices for this part:
 - ``pip install -r req.txt`` which will install the required Libraries needed to run this project. Good for production
 - ``python -m venv venv``  to go for the virtual enviroment route. Good for development
-4) create a .env file and put ``token=Your_discord_bot's_token`` (if you havent got one then generate one [here](https://discord.com/developers))
+4) create a .env file and put ``token=Your_discord_bot's_token`` (if you havent got one then generate one [here](https://discord.com/developers)) and ``id=[list_of_your_guild_ids]``
 
 Note: this bot specifically was made to help the Admincraft server so some features might not be suited for others
   

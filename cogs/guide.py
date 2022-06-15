@@ -12,8 +12,8 @@ guides = {
     "bukkit": "https://bukkit.fandom.com/wiki/Bukkit.yml",
     "spigot": "https://www.spigotmc.org/wiki/spigot/",
     "hilltty flags": "https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md",
-    "aikar flags":  "https://aikar.co/mcflags.html",
-    "offline mode": "You really shouldnt be using offline mode. See this: https://archive.ph/jWqGW"
+    "aikar flags": "https://aikar.co/mcflags.html",
+    "offline mode": "You really shouldnt be using offline mode. See this: https://archive.ph/jWqGW",
 }
 guide_group = []
 for i in guides:

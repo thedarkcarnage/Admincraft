@@ -1,4 +1,7 @@
 import discord
+from discord.commands import (  # Importing the decorator that makes slash commands.
+    slash_command,
+)
 from discord.ext import commands
 
 import aiohttp
@@ -15,7 +18,12 @@ opt = [
 
 
 class RTFMS(commands.Cog):
-    @commands.command(description="lets you search docs")
+    def __init__(self, bot):
+        self.bot = bot
+
+    @slash_command(
+        description="lets you search docs\ndocument= paper, purpur or bukkit"
+    )
     async def rtfm(
         self,
         ctx,
