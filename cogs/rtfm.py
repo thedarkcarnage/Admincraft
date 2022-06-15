@@ -22,7 +22,7 @@ class RTFMS(commands.Cog):
         self.bot = bot
 
     @slash_command(
-        description="lets you search docs\ndocument= paper, purpur or bukkit"
+        description="lets you search docs for a specific value. feeling lazy?"
     )
     async def rtfm(
         self,
