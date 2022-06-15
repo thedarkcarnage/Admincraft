@@ -14,6 +14,7 @@ guides = {
     "hilltty flags": "https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md",
     "aikar flags": "https://aikar.co/mcflags.html",
     "offline mode": "You really shouldnt be using offline mode. See this: https://archive.ph/jWqGW",
+    "pirary": "We do not tolerate piracy in our community. Sharing plugins that were cracked/locked behind paywall (compiling is often fine) or having your server in Offline mode are common ways to commit piracy. Read https://archive.ph/jWqGW to know why offline mode is bad "
 }
 guide_group = []
 for i in guides:

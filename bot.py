@@ -23,6 +23,7 @@ class MyHelp(commands.MinimalHelpCommand):
         destination = self.get_destination()
         for page in self.paginator.pages:
             emby = discord.Embed(description=page)
+            emby.set_footer(text='Bot originally was based on Birdflop')
             await destination.send(embed=emby)
 
 
