@@ -12,8 +12,44 @@ servers:
   value: |-
     Yatopia is prone to bugs and is no longer in development.
     Consider using [Purpur](https://ci.pl3x.net/job/Purpur/) for the closest replacement.
+- name: "Airplane"
+  prefix: "❌"
+  value: |-
+    Airplane is no longer in development.
+    Consider using [Pufferfish](https://github.com/pufferfish-gg/Pufferfish) for the closest replacement.
 plugins:
   paper:
+    skinsrestorer:
+      prefix: "❌"
+      value: |-
+        Skin changing plugin often used for **OFFLINE MODE SERVERS**.
+    MySkin:
+      prefix: "❌"
+      value: |-
+        Skinc changing plugin often used for **OFFLINE MODE SERVERS**.
+    AuthMe:
+      prefix: "❌"
+      value: |-
+        login plugin often used for **OFFLINE MODE SERVERS**.
+    AdvancedLogin:
+      prefix: "❌"
+      value: |-
+        login plugin often used for **OFFLINE MODE SERVERS**.
+    FakePlayersOnline:
+      prefix: "❌"
+      value: |-
+        **ILLEGAL** plugin used to fake players, against minecraft's TOS!.
+    FakePlayers:
+      prefix: "❌"
+      value: |-
+        **ILLEGAL** plugin used to fake players, against minecraft's TOS!.
+    PlugMan:
+    PluginManager:
+    PlugManX:
+      prefix: "❌"
+      value: |-
+        plugman can be unpredictable in issues it causes and is dangerous to use overall.
+             
     ClearLag:
       prefix: "❌"
       value: |-

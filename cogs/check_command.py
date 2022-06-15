@@ -1,4 +1,5 @@
 import discord
+from discord.commands import SlashCommandGroup
 from discord.ext import commands
 import aiohttp
 import yaml
@@ -8,6 +9,15 @@ import math
 
 TIMINGS_CHECK = None
 YAML_ERROR = None
+
+logging.basicConfig(
+    filename=".log",
+    level=logging.INFO,
+    format="[%(asctime)s %(levelname)s] %(ctx)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+logging.getLogger()
+
 with open("cogs/timings_check.yml", "r", encoding="utf8") as stream:
     try:
         TIMINGS_CHECK = yaml.safe_load(stream)
@@ -18,20 +28,22 @@ with open("cogs/timings_check.yml", "r", encoding="utf8") as stream:
 VERSION_REGEX = re.compile(r"\d+\.\d+\.\d+")
 
 
-class Timings(commands.Cog):
+class Timings_command(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.TIMINGS_TITLE = "Timings Analysis"
 
-    async def analyze_timings(self, message, interaction=None):
-        words = message.content.replace("\n", " ").split(" ")
+    check = SlashCommandGroup("check", "Commands for checking things")
+
+    @check.command(description="checks timings")
+    async def timings(self, ctx: discord.ApplicationContext, timings: str):
+        words = timings.replace("\n", " ").split(" ")
         timings_url = ""
         embed_var = discord.Embed(
-            title=self.TIMINGS_TITLE,
-            description="These are not magic values. Many of these settings have real consequences on your server's mechanics. See [this guide](https://eternity.community/index.php/paper-optimization/) for detailed information on the functionality of each setting, you can read [Minecraft optimization](https://github.com/YouHaveTrouble/minecraft-optimization/).",
+            title="Timings Analysis",
+            description="These are not magic values. Many of these settings have real consequences on your server's mechanics. See [this guide](https://eternity.community/index.php/paper-optimization/) for detailed information on the functionality of each setting, you can also read [Minecraft optimization](https://github.com/YouHaveTrouble/minecraft-optimization/).",
         )
         embed_var.set_footer(
-            text=f"Requested by {message.author}", icon_url=message.author.avatar
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar
         )
 
         for word in words:
@@ -48,42 +60,42 @@ class Timings(commands.Cog):
             ) or word.startswith("https://timings.spigotmc.org/?url="):
                 embed_var.add_field(
                     name="❌ Spigot",
-                    value="Spigot timings have limited information. Switch to [Purpur](https://purpurmc.org) for better timings analysis. All your plugins will be compatible, and if you don't like it, you can easily switch back.",
+                    value="Spigot timings have limited information. Switch to [Purpur](https://purpurmc.org) or [Paper](https://papermc.io/) for better timings analysis. All your plugins will be compatible, and if you don't like it, you can easily switch back.",
                 )
                 embed_var.url = word
-                await message.reply(embed=embed_var)
+                await ctx.reply(embed=embed_var)
                 return
 
-        # If using buttons, get the url of the timings from the embed title url, also override message.author with the button presser
-        if interaction:
-            timings_url = message.embeds[0].url
-            embed_var.url = timings_url
-            message.author = interaction.user
-
+        # the format we're given looks invalid so we're going to ignore it
         if timings_url == "":
             return
         if "#" in timings_url:
             timings_url = timings_url.split("#")[0]
         if "?id=" not in timings_url:
             return
+        # if we're here then it means we likely have a valid timings
         logging.info(
-            f"Timings analyzed from {message.author} ({message.author.id}): {timings_url}"
+            f"Timings analyzed from {ctx.author} ({ctx.author.id}): {timings_url}"
         )
 
+        # timings variables
         timings_host, timings_id = timings_url.split("?id=")
         timings_json = timings_host + "data.php?id=" + timings_id
         timings_url_raw = timings_url + "&raw=1"
 
+        # grabbing timings data
         async with aiohttp.ClientSession() as session:
             async with session.get(timings_url_raw) as response:
                 request_raw = await response.json(content_type=None)
             async with session.get(timings_json) as response:
                 request = await response.json(content_type=None)
+        # if we couldnt get anything then it means timings was empty or api issue
+
         if request is None or request_raw is None:
             embed_var.add_field(
                 name="❌ Invalid report", value="Create a new timings report."
             )
-            await message.reply(embed=embed_var)
+            await ctx.reply(embed=embed_var)
             return
 
         try:
@@ -102,7 +114,6 @@ class Timings(commands.Cog):
                     if "version" in request["timingsMaster"]
                     else None
                 )
-                print(version)
                 if version.count(".") == 1:
                     version = version[:-1]
                     version = version + ".0)"
@@ -237,7 +248,7 @@ class Timings(commands.Cog):
                 else:
                     embed_var.add_field(
                         name="❌ Aikar's Flags",
-                        value="Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/).",
+                        value="Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) or [hilltty-flags](https://github.com/hilltty/hilltty-flags/blob/main/english-lang.md) unless you're using something better.",
                     )
             except KeyError as key:
                 logging.info("Missing: " + str(key))
@@ -431,70 +442,27 @@ class Timings(commands.Cog):
             embed_var.add_field(
                 name="✅ All good", value="Analyzed with no recommendations"
             )
-            await message.reply(embed=embed_var)
+            await ctx.reply(embed=embed_var)
             return
 
         issue_count = len(embed_var.fields)
-        if issue_count >= 13:
-            # Check if a button is being used, if so, use the footer to get the current page, if not, use -1, since 1 will be added to it
-            if interaction:
-                lastPage = (
-                    int(
-                        message.embeds[0]
-                        .footer.text.split(" • Page ")[1]
-                        .split(" of ")[0]
-                    )
-                    - 1
-                )
-            else:
-                lastPage = -1
-            # Check if button is prev, if not, add 1 to lastPage and set it to currentPage, it'll be 0 if not using buttons
-            if interaction and interaction.data["custom_id"] == "prev":
-                currentPage = lastPage - 1
-            else:
-                currentPage = lastPage + 1
-            # If new page is over the max, set it to the first page, and vice versa
-            if currentPage == math.ceil(issue_count / 12):
-                currentPage = 0
-            if currentPage == -1:
-                currentPage = math.ceil(issue_count / 12) - 1
-            # Set the index by multiplying by 12 issues per page
-            index = currentPage * 12
-            # Delete the index behind the first issue in the page
-            del embed_var._fields[:(index)]
-            # Delete the issues after the last issue in the page
-            del embed_var._fields[(12):]
-            # Add a field showing the amount of recommendations and to use buttons
-            if not interaction:
-                embed_var.add_field(
-                    name=f"Plus {issue_count - 12} more recommendations",
-                    value="Click the buttons below to see more",
-                )
-            embed_var.set_footer(
-                text=f"Requested by {message.author.name}#{message.author.discriminator} • Page {currentPage + 1} of {math.ceil(issue_count / 12)}",
-                icon_url=message.author.avatar,
-            )
 
-        # If using a button, edit the message, if not, send the message with buttons
-        if interaction:
-            await interaction.response.edit_message(embed=embed_var)
-        elif issue_count >= 13:
-            view = discord.ui.View()
-            nextbtn = discord.ui.Button(
-                style=discord.ButtonStyle.gray,
-                label="►",
-                custom_id=f"next_{message.author.id}",
-            )
-            prevbtn = discord.ui.Button(
-                style=discord.ButtonStyle.gray,
-                label="◄",
-                custom_id=f"prev_{message.author.id}",
-            )
-            view.add_item(item=prevbtn)
-            view.add_item(item=nextbtn)
-            await message.reply(embed=embed_var, view=view)
+        # Time to split embeds into smol things
+        pages = math.ceil(issue_count / 12) if issue_count >= 13 else 1
+        print(pages)
+        print(issue_count)
+        if pages > 1:
+            split_embed = embed_var
+            for i in range(0, math.ceil(len(embed_var.fields) / 2)):
+                print(i)
+                print(split_embed.fields[i])
+                split_embed.remove_field(i)
+
+            await ctx.respond(embed=embed_var)
+            await ctx.send(embed=split_embed)
+
         else:
-            await message.reply(embed=embed_var)
+            await ctx.reply(embed=embed_var)
 
 
 def eval_field(
@@ -589,4 +557,4 @@ def compare_versions(version_a, version_b):
 
 
 def setup(bot):
-    bot.add_cog(Timings(bot))
+    bot.add_cog(Timings_command(bot))

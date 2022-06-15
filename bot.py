@@ -18,7 +18,7 @@ bot = bridge.Bot(
 load_dotenv()
 
 logging.basicConfig(
-    filename="console.log",
+    filename=".log",
     level=logging.ERROR,
     format="[%(asctime)s %(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
@@ -52,7 +52,7 @@ async def on_message(message):
                 message.attachments[i]
                 .url.lower()
                 .endswith((".jar", ".exe", ".com", ".deb", ".msi"))
-                == False
+                == True
             ):
                 # removes the message since it contains forbidden file
                 # lets the user know why
@@ -117,22 +117,30 @@ async def on_message(message):
                         response + "\n(file was truncated because it was too long.)"
                     )
                 embed_var = discord.Embed(
-                    title="Please use a paste service", color=0x1D83D4
+                    title="Please use a paste service next time!!", color=0x1D83D4
                 )
                 embed_var.description = response
                 try:
                     print("sucessfuly sent embed")
                     await message.channel.send(embed=embed_var)
+                    await message.delete()
                 except:
                     print("Permission error")
                 logging.info(
                     f"File uploaded by {message.author} ({message.author.id}): {key}"
                 )
     # Pastebin is blocked in some countries
+    # We probably could have used regex here but this works
+    # split messages into parts
     words = message.content.replace("\n", " ").split(" ")
     for word in words:
-        if word.startswith("https://pastebin.com/") and len(word) == 29:
+        # We're looking for a pastebin link
+        if (word.startswith("https://pastebin.com/") and len(word) == 29) or (
+            word.startswith("http://pastebin.com/") and len(word) == 28
+        ):
+            # if pastebin key found then lets get the kewy
             pastebinkey = word[len(word) - 8 :]
+            # grabs pastebincontent and stores in variable
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"https://pastebin.com/raw/{pastebinkey}") as r:
                     text = await r.text()
@@ -167,11 +175,35 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-@bot.slash_command()
+@bot.event
+async def on_interaction(interaction):
+    # the birdflop code uses this section to just create button interaction for timings
+    if interaction.type.name == "component":
+        if str(interaction.user.id) in interaction.data["custom_id"]:
+            timings = bot.get_cog("Timings")
+            if "prev" in interaction.data["custom_id"]:
+                await timings.analyze_timings(interaction.message, interaction)
+            if "next" in interaction.data["custom_id"]:
+                await timings.analyze_timings(interaction.message, interaction)
+
+    # This is important because it allows OTHER interactions such as interactions process as normal
+    else:
+        await bot.process_application_commands(interaction)
+
+
+# error handling
+@bot.event
+async def on_command_error(ctx, error):
+    # we dont really care if the bot cant find a command
+    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+        pass
+
+
+# Simple ping command
+@bot.bridge_command()
 async def ping(ctx):
     await ctx.defer()
-    await ctx.respond(f"Timings bot ping is {round(bot.latency * 1000)}ms")
-
+    await ctx.respond(f"bot ping is {round(bot.latency * 1000)}ms")
 
 
 # Dynamic way of loading in cogs
@@ -180,5 +212,11 @@ for file_name in os.listdir("./cogs"):
         print(f"[🟢] IMPORTED | {file_name}")
         bot.load_extension(f"cogs.{file_name[:-3]}")
 
+# Messy way of adding eval command to be used for debugging or other utils
+bot.load_extension("jishaku")
+cmd = bot.get_command("jishaku")
+cmd.aliases.append("eval")
+bot.remove_command("jishaku")
+bot.add_command(cmd)
 
 bot.run(os.getenv("token"))
