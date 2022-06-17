@@ -28,7 +28,7 @@ guides = {
 
         - **VPS** will usually have something on the dashboard manager that lets you control the network security things such as what ports are open. Just google how to open port on your VPS provider.
 
-        - Linux users might need to mess with [Iptables](https://www.hostinger.co.uk/tutorials/iptables-tutorial) or [ufw for ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-20-04) (other linux flavours have different ways. So please do some research)
+        - Linux users might need to mess with [Iptables](https://www.hostinger.co.uk/tutorials/iptables-tutorial) or [ufw for ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-20-04) (This guide was written for Ubuntu 20.04 so other versions may have different syntax. other linux flavours have different ways. So please do some research before blindly trying something)
 
         **How do i check if my port is open?**
         You can use this [port scanner](https://www.yougetsignal.com/tools/open-ports/) or [dnschecker's port scanner](https://dnschecker.org/port-scanner.php) which allow multiple port scans.
