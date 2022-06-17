@@ -33,17 +33,32 @@ class RTFM(commands.Cog):
                     "https://docs.papermc.io/paper/reference/paper-global-configuration"
                 ) as response:
                     html = await response.text()
+                async with session.get(
+                    "https://docs.papermc.io/paper/reference/world-configuration"
+                ) as response:
+                    html2 = await response.text()
+
             # Here we're scraping the paper page
             soup = BeautifulSoup(html, "html.parser")
             # paper uses h3 tag for config settings
             anchor = soup.findAll("h3")
+
+            soup2 = BeautifulSoup(html2, "html.parser")
+            # paper uses h3 tag for config settings
+            anchor2 = soup2.findAll("h3")
             # used to store all the linkable content
+
             configuruation = []
             #  stores every potential config link in here
             for i in anchor:
                 configuruation.append(
                     f"https://docs.papermc.io/paper/reference/paper-global-configuration#{str(i.next_element)}"
                 )
+            for i in anchor2:
+                configuruation.append(
+                    f"https://docs.papermc.io/paper/reference/paper-global-configuration#{str(i.next_element)}"
+                )
+
             # preparing found array
             found = []
             # result will be the embed description

@@ -23,7 +23,7 @@ class MyHelp(commands.MinimalHelpCommand):
         destination = self.get_destination()
         for page in self.paginator.pages:
             emby = discord.Embed(description=page)
-            emby.set_footer(text='Bot originally was based on Birdflop')
+            emby.set_footer(text="Bot was based on the Birdflop bot") # credit for the bot whenever the user runs help command.
             await destination.send(embed=emby)
 
 
