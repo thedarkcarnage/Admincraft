@@ -147,7 +147,7 @@ async def on_message(message):
                     name="❌ Stolen plugins", value="**likely has cracked plugins**"
                 )
 
-                embed_var.description = response
+            embed_var.description = response
             try:
                 print("sucessfuly sent embed")
                 await message.channel.send(embed=embed_var)
