@@ -32,7 +32,7 @@ load_dotenv()
 
 logging.basicConfig(
     filename=".log",
-    level=logging.ERROR,
+    level=logging.INFO,
     format="[%(asctime)s %(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
@@ -110,7 +110,7 @@ async def on_message(message):
                 text = "\n".join(text.splitlines())
                 truncated = False
                 body = {"content": text}
-                print("text is stored")
+                print(f"text is stored, len {len(text)}")
                 if len(text) > 100000:
                     text = text[:99999]
                     truncated = True
@@ -136,7 +136,6 @@ async def on_message(message):
                 embed_var.add_field(
                     name="❌ OFFLINE MODE", value="Offline mode has been detected"
                 )
-
             if (
                 text.lower().find("blackspigot") != -1
                 or text.lower().find("cracked by") != -1
@@ -149,15 +148,15 @@ async def on_message(message):
                 )
 
                 embed_var.description = response
-                try:
-                    print("sucessfuly sent embed")
-                    await message.channel.send(embed=embed_var)
-                    await message.delete()
-                except:
-                    print("Permission error")
-                logging.info(
-                    f"File uploaded by {message.author} ({message.author.id}): {key}"
-                )
+            try:
+                print("sucessfuly sent embed")
+                await message.channel.send(embed=embed_var)
+                await message.delete()
+            except:
+                print("Permission error")
+            logging.info(
+                f"File uploaded by {message.author} ({message.author.id}): {key}"
+            )
     # Pastebin is blocked in some countries
     # We probably could have used regex here but this works
     # split messages into parts
