@@ -47,6 +47,19 @@ guides = {
         [Github](https://github.com/PurpurMC/Purpur)
         """,
     ),
+    "panels": discord.Embed(
+        title="Server panels",
+        color=discord.Color.random(),
+        description="""
+        A game server management panel lets you manage your game server just through a website hosting your panel. Most hosting providers will have one but if you're self hosting or setting one up on a VPS you'll need to install one by yourself. Down below i'll list some choices but i encourage you to look into the subject yourself and choose one best for yourself
+        [pterodactyl](https://pterodactyl.io/) [linux]
+        [PufferPanel](https://www.pufferpanel.com/) [linux]
+        [Multicraft](https://www.multicraft.org/) [linux] [windows]
+        [AMP](https://cubecoders.com/AMP) [linux] [windows]
+        [crafty](https://craftycontrol.com/) [linux] [windows] [mac] (uses python)
+        [More found here](https://minecraftservers.fandom.com/wiki/Server_wrappers)
+        """,
+    ),
     "pufferfish": discord.Embed(
         title="Pufferfish",
         color=discord.Color.random(),

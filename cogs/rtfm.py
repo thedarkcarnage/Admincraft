@@ -71,8 +71,7 @@ class RTFMS(commands.Cog):
             result = ""
             # looping through potential configuration to search for what the user wants
             for i in configuruation:
-                print(i)
-                if re.search(f"{lookup}", i):
+                if re.search(f"{lookup}", i.rsplit('#')[1]):
                     # returns url, setting value
                     found.append(i)
             # Looping through potential found values to append to the embed description

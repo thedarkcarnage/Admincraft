@@ -32,7 +32,7 @@ load_dotenv()
 
 logging.basicConfig(
     filename=".log",
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="[%(asctime)s %(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
@@ -132,7 +132,7 @@ async def on_message(message):
                 embed_var = discord.Embed(
                     title="Please use a paste service next time!!", color=0x1D83D4
                 )
-            if text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") != -1:
+            if text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") == -1:
                 embed_var.add_field(
                     name="❌ OFFLINE MODE", value="Offline mode has been detected"
                 )
