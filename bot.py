@@ -150,8 +150,7 @@ async def on_message(message):
             embed_var.description = response
             try:
                 print("sucessfuly sent embed")
-                await message.channel.send(embed=embed_var)
-                await message.delete()
+                await message.reply(embed=embed_var)
             except:
                 print("Permission error")
             logging.info(
@@ -210,7 +209,7 @@ async def on_message(message):
                 )
             embed_var.description = response
             try:
-                await message.channel.send(embed=embed_var)
+                await message.reply(embed=embed_var)
             except:
                 print("Permission error")
     timings = bot.get_cog("Timings")
