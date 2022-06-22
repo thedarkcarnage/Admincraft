@@ -23,7 +23,9 @@ class MyHelp(commands.MinimalHelpCommand):
         destination = self.get_destination()
         for page in self.paginator.pages:
             emby = discord.Embed(description=page)
-            emby.set_footer(text="Bot was based on the Birdflop bot") # credit for the bot whenever the user runs help command.
+            emby.set_footer(
+                text="Bot was based on the Birdflop bot"
+            )  # credit for the bot whenever the user runs help command.
             await destination.send(embed=emby)
 
 
@@ -110,7 +112,6 @@ async def on_message(message):
                 text = "\n".join(text.splitlines())
                 truncated = False
                 body = {"content": text}
-                print(f"text is stored, len {len(text)}")
                 if len(text) > 100000:
                     text = text[:99999]
                     truncated = True
@@ -132,9 +133,18 @@ async def on_message(message):
                 embed_var = discord.Embed(
                     title="Please use a paste service next time!!", color=0x1D83D4
                 )
-            if text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") == -1:
+
+            if (
+                text.find("SERVER IS RUNNING IN OFFLINE/INSECURE MODE") != -1
+                and text.find("Enabled BungeeCord") == -1
+            ):
                 embed_var.add_field(
                     name="❌ OFFLINE MODE", value="Offline mode has been detected"
+                )
+            if text.find("FakePlayersOnline") != -1:
+                embed_var.add_field(
+                    name="❌ Illegal plugin",
+                    value="Mojang does not allow fake player plugins",
                 )
             if (
                 text.lower().find("blackspigot") != -1
@@ -145,6 +155,36 @@ async def on_message(message):
             ):
                 embed_var.add_field(
                     name="❌ Stolen plugins", value="**likely has cracked plugins**"
+                )
+            if (
+                text.lower().find("plugman") != -1
+                or text.lower().find("pluginmanager") != -1
+                or text.lower().find("plugmanx") != -1
+            ):
+                embed_var.add_field(
+                    name="📚 plugin manager",
+                    value="Plugin managers arent usually secure/safe and often introduces bugs",
+                )
+            if (
+                text.lower().find("ClearLagg") != -1
+                or text.lower().find("LaggRemover") != -1
+            ):
+                embed_var.add_field(
+                    name="📚 lag manager",
+                    value="Often causes more lag or issues like items dissapearing weirdly",
+                )
+
+            if (
+                text.lower().find("Skinsrestorer") != -1
+                or text.lower().find("myskin") != -1
+                or text.lower().find("jpremium") != -1
+                or text.lower().find("fastlogin") != -1
+                or text.lower().find("antijoinbot") != -1
+                or text.lower().find("hamsterapi") != -1
+            ):
+                embed_var.add_field(
+                    name="❌ offline mode plugins",
+                    value="**likely has plugins used for offline mode servers**",
                 )
 
             embed_var.description = response
