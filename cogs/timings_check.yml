@@ -247,7 +247,7 @@ config:
     - expressions:
       - spigot["world-settings"]["default"]["entity-activation-range"]["tick-inactive-villagers"] == "true"
       prefix: "❌"
-      value: "Disable this in [spigot.yml]https://www.spigotmc.org/wiki/spigot-configuration/)."
+      value: "Disable this in [spigot.yml](https://www.spigotmc.org/wiki/spigot-configuration/)."
     entity-activation-range.wake-up-inactive.villagers-for:
     - expressions:
       - int(spigot["world-settings"]["default"]["entity-activation-range"]["wake-up-inactive"]["villagers-max-per-tick"]) >= 1
