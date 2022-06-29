@@ -92,7 +92,7 @@ class Timings(commands.Cog):
                 if onlineMode == False:
                     embed_var.add_field(
                         name="❌ Online-mode",
-                        value=f"**Your Sevrer is set to **OFFLINE MODE**, please read [here](https://archive.ph/jWqGW) on why offline mode servers are bad. We dont support piracy !**",
+                        value=f"**Your server is set to **OFFLINE MODE**, please read [this](https://archive.ph/jWqGW) if you dont know why offline mode shouldn't be used.",
                     )
             except KeyError as key:
                 logging.info("Missing: " + str(key))
@@ -137,7 +137,7 @@ class Timings(commands.Cog):
                 if timing_cost > 300:
                     embed_var.add_field(
                         name="❌ Timingcost",
-                        value=f"Your timingcost is {timing_cost}. Your cpu is overloaded and/or slow. Find a better host via [marketplace](https://www.reddit.com/search?q=subreddit:admincraft+author:IntelliDev+title:(%22Admincraft+Marketplace%22+OR+%22Admincraft+Monthly+Marketplace%22)&sort=new).",
+                        value=f"Your timingcost is {timing_cost}. Your cpu is overloaded and/or slow.",
                     )
             except KeyError as key:
                 logging.info("Missing: " + str(key))
@@ -224,11 +224,11 @@ class Timings(commands.Cog):
                                     min_mem = min_mem.replace("M", "")
                                     min_mem = min_mem.replace("g", "000")
                                     min_mem = min_mem.replace("m", "")
-                            if min_mem != max_mem:
-                                embed_var.add_field(
-                                    name="❌ Aikar's Flags",
-                                    value="Your Xmx and Xms values should be equal when using Aikar's flags.",
-                                )
+                            # if min_mem != max_mem:
+                            #     embed_var.add_field(
+                            #         name="❌ Aikar's Flags",
+                            #         value="Your Xmx and Xms values should be equal when using Aikar's flags.",
+                            #     )
                 elif "-Dusing.aikars.flags=mcflags.emc.gs" in flags:
                     embed_var.add_field(
                         name="❌ Outdated Flags",
@@ -247,12 +247,12 @@ class Timings(commands.Cog):
                 if cpu == 1:
                     embed_var.add_field(
                         name="❌ Threads",
-                        value=f"You have only {cpu} thread. Find a better host via [marketplace](https://www.reddit.com/search?q=subreddit:admincraft+author:IntelliDev+title:(%22Admincraft+Marketplace%22+OR+%22Admincraft+Monthly+Marketplace%22)&sort=new).",
+                        value=f"You have only {cpu} thread.",
                     )
                 if cpu == 2:
                     embed_var.add_field(
                         name="❌ Threads",
-                        value=f"You have only {cpu} threads. Find a better host via [marketplace](https://www.reddit.com/search?q=subreddit:admincraft+author:IntelliDev+title:(%22Admincraft+Marketplace%22+OR+%22Admincraft+Monthly+Marketplace%22)&sort=new).",
+                        value=f"You have only {cpu} threads.",
                     )
             except KeyError as key:
                 logging.info("Missing: " + str(key))

@@ -5,7 +5,7 @@
 # wake_up_inactive_animals_every = int(spigot["world-settings"]["default"]["entity-activation-range"]["wake-up-inactive"]["animals-every"])
 # wake_up_inactive_flying_monsters_every = int(spigot["world-settings"]["default"]["entity-activation-range"]["wake-up-inactive"]["flying-monsters-every"])
 # wake_up_inactive_monsters_every = int(spigot["world-settings"]["default"]["entity-activation-range"]["wake-up-inactive"]["monsters-every"])
-version: "1.18.1"
+version: "1.19"
 servers:
 - name: "Yatopia"
   prefix: "❌"
@@ -22,19 +22,20 @@ plugins:
     skinsrestorer:
       prefix: "❌"
       value: |-
-        Skin changing plugin often used for **OFFLINE MODE SERVERS**.
+      
+        Skin changing plugin generally used by **offline mode servers**, which admincraft can't help with.
     MySkin:
       prefix: "❌"
       value: |-
-        Skinc changing plugin often used for **OFFLINE MODE SERVERS**.
+        Skinc changing plugin generally used by **offline mode servers**, which admincraft can't help with.
     AuthMe:
       prefix: "❌"
       value: |-
-        login plugin often used for **OFFLINE MODE SERVERS**.
+        login plugin generally used by **offline mode servers**, which admincraft can't help with.
     AdvancedLogin:
       prefix: "❌"
       value: |-
-        login plugin often used for **OFFLINE MODE SERVERS**.
+        login plugin generally used by **offline mode servers**, which admincraft can't help with.
     FakePlayersOnline:
       prefix: "❌"
       value: |-
